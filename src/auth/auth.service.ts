@@ -1,38 +1,59 @@
-import { Injectable } from '@nestjs/common';
+import { Injectable, UnauthorizedException } from '@nestjs/common';
 import { JwtService } from '@nestjs/jwt';
 import * as bcrypt from 'bcrypt';
-import { User } from './entities/user.entity';
+import { User, UserDocument } from './entities/user.entity';
+import { UserService } from './user.service';
 
 @Injectable()
 export class AuthService {
-  constructor(private jwtService: JwtService) {}
+  constructor(
+    private jwtService: JwtService,
+    private userService: UserService,
+  ) {}
 
   async validateUser(username: string, password: string): Promise<any> {
-    // TODO: Implement user repository
-    const user = { username: 'test', password: await bcrypt.hash('test', 10) };
+    const user = await this.userService.findByUsername(username);
     
     if (user && await bcrypt.compare(password, user.password)) {
-      const { password, ...result } = user;
+      const { password, ...result } = user.toObject();
       return result;
     }
     return null;
   }
 
-  async login(user: any) {
-    const payload = { username: user.username, sub: user.id };
+  async login(user: UserDocument) {
+    const payload = { username: user.username, sub: user._id };
     return {
       access_token: this.jwtService.sign(payload),
+      user: {
+        id: user._id,
+        username: user.username,
+        email: user.email,
+      },
     };
   }
 
-  async register(user: Partial<User>) {
-    if (!user.password) {
-      throw new Error('Password is required');
+  async register(userData: Partial<User>) {
+    try {
+      const newUser = await this.userService.create(userData);
+      const { password, ...result } = newUser.toObject();
+      
+      return {
+        message: 'User registered successfully',
+        user: result,
+      };
+    } catch (error) {
+      throw new UnauthorizedException(error.message);
     }
-    const hashedPassword = await bcrypt.hash(user.password, 10);
-    // TODO: Implement user creation in repository
-    return {
-      message: 'User registered successfully',
-    };
+  }
+
+  async getProfile(userId: string) {
+    const user = await this.userService.findById(userId);
+    if (!user) {
+      throw new UnauthorizedException('User not found');
+    }
+    
+    const { password, ...result } = user.toObject();
+    return result;
   }
 } 
