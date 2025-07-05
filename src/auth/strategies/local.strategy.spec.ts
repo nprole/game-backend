@@ -56,4 +56,4 @@ describe('LocalStrategy', () => {
       expect(authService.validateUser).toHaveBeenCalledWith(username, password);
     });
   });
-}); 
+});

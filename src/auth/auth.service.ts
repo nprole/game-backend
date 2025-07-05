@@ -13,8 +13,8 @@ export class AuthService {
 
   async validateUser(username: string, password: string): Promise<any> {
     const user = await this.userService.findByUsername(username);
-    
-    if (user && await bcrypt.compare(password, user.password)) {
+
+    if (user && (await bcrypt.compare(password, user.password))) {
       const { password, ...result } = user.toObject();
       return result;
     }
@@ -37,7 +37,7 @@ export class AuthService {
     try {
       const newUser = await this.userService.create(userData);
       const { password, ...result } = newUser.toObject();
-      
+
       return {
         message: 'User registered successfully',
         user: result,
@@ -52,8 +52,8 @@ export class AuthService {
     if (!user) {
       throw new UnauthorizedException('User not found');
     }
-    
+
     const { password, ...result } = user.toObject();
     return result;
   }
-} 
+}

@@ -5,6 +5,7 @@ import { MongooseModule } from '@nestjs/mongoose';
 import { AuthService } from './auth.service';
 import { AuthController } from './auth.controller';
 import { UserService } from './user.service';
+import { PlayerStatsService } from './player-stats.service';
 import { User, UserSchema } from './entities/user.entity';
 import { LocalStrategy } from './strategies/local.strategy';
 import { JwtStrategy } from './strategies/jwt.strategy';
@@ -19,7 +20,13 @@ import { JwtStrategy } from './strategies/jwt.strategy';
     }),
   ],
   controllers: [AuthController],
-  providers: [AuthService, UserService, LocalStrategy, JwtStrategy],
-  exports: [AuthService, UserService],
+  providers: [
+    AuthService,
+    UserService,
+    PlayerStatsService,
+    LocalStrategy,
+    JwtStrategy,
+  ],
+  exports: [AuthService, UserService, PlayerStatsService],
 })
-export class AuthModule {} 
+export class AuthModule {}

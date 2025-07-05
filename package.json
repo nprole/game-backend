@@ -12,12 +12,18 @@
     "start:dev": "nest start --watch",
     "start:debug": "nest start --debug --watch",
     "start:prod": "node dist/main",
+    "seed:countries": "npx ts-node src/scripts/seed-countries.ts",
     "lint": "eslint \"{src,apps,libs,test}/**/*.ts\" --fix",
     "test": "jest",
     "test:watch": "jest --watch",
     "test:cov": "jest --coverage",
     "test:debug": "node --inspect-brk -r tsconfig-paths/register -r ts-node/register node_modules/.bin/jest --runInBand",
-    "test:e2e": "jest --config ./test/jest-e2e.json"
+    "test:e2e": "jest --config ./test/jest-e2e.json",
+    "test:db": "jest --testPathPattern=database-population.integration.spec.ts",
+    "test:service": "jest --testPathPattern=game.service.spec.ts",
+    "test:seed": "jest --testPathPattern=seed-countries.spec.ts",
+    "test:integration": "jest --testPathPattern=integration.spec.ts",
+    "test:coverage": "jest --coverage --coverageReporters=text-lcov --coverageReporters=html"
   },
   "dependencies": {
     "@nestjs/common": "^11.0.1",
@@ -26,16 +32,21 @@
     "@nestjs/mongoose": "^11.0.3",
     "@nestjs/passport": "^11.0.5",
     "@nestjs/platform-express": "^11.0.1",
+    "@nestjs/platform-socket.io": "^11.0.1",
+    "@nestjs/websockets": "^11.0.1",
     "@types/bcrypt": "^5.0.2",
     "@types/passport": "^1.0.17",
+    "axios": "^1.10.0",
     "bcrypt": "^6.0.0",
     "dotenv": "^17.0.1",
     "mongoose": "^8.16.1",
     "passport": "^0.7.0",
     "passport-jwt": "^4.0.1",
     "passport-local": "^1.0.0",
+    "redis": "^4.6.0",
     "reflect-metadata": "^0.2.2",
-    "rxjs": "^7.8.1"
+    "rxjs": "^7.8.1",
+    "socket.io": "^4.8.0"
   },
   "devDependencies": {
     "@eslint/eslintrc": "^3.2.0",

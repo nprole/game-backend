@@ -45,4 +45,4 @@ describe('JwtStrategy', () => {
       });
     });
   });
-}); 
+});

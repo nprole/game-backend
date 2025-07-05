@@ -6,9 +6,7 @@ import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class UserService {
-  constructor(
-    @InjectModel(User.name) private userModel: Model<UserDocument>,
-  ) {}
+  constructor(@InjectModel(User.name) private userModel: Model<UserDocument>) {}
 
   async findByUsername(username: string): Promise<UserDocument | null> {
     return this.userModel.findOne({ username }).exec();
@@ -57,7 +55,10 @@ export class UserService {
     return newUser.save();
   }
 
-  async update(id: string, updateData: Partial<User>): Promise<UserDocument | null> {
+  async update(
+    id: string,
+    updateData: Partial<User>,
+  ): Promise<UserDocument | null> {
     if (updateData.password) {
       updateData.password = await bcrypt.hash(updateData.password, 10);
     }
@@ -71,4 +72,13 @@ export class UserService {
     const result = await this.userModel.findByIdAndDelete(id).exec();
     return !!result;
   }
-} 
+
+  async getLeaderboard(limit: number = 50): Promise<UserDocument[]> {
+    return this.userModel
+      .find({ isActive: true })
+      .select('username level xp')
+      .sort({ level: -1, xp: -1 })
+      .limit(limit)
+      .exec();
+  }
+}

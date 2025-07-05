@@ -17,6 +17,22 @@ export class User {
   @Prop({ default: true })
   isActive: boolean;
 
+  // Player progression and currency
+  @Prop({ default: 1 })
+  level: number;
+
+  @Prop({ default: 0 })
+  xp: number;
+
+  @Prop({ default: 500 })
+  gold: number;
+
+  @Prop({ default: 50 })
+  diamonds: number;
+
+  @Prop({ default: 10 })
+  rubies: number;
+
   @Prop({ default: Date.now })
   createdAt: Date;
 
@@ -24,4 +40,4 @@ export class User {
   updatedAt: Date;
 }
 
-export const UserSchema = SchemaFactory.createForClass(User); 
+export const UserSchema = SchemaFactory.createForClass(User);
