@@ -21,6 +21,175 @@
   <!--[![Backers on Open Collective](https://opencollective.com/nest/backers/badge.svg)](https://opencollective.com/nest#backer)
   [![Sponsors on Open Collective](https://opencollective.com/nest/sponsors/badge.svg)](https://opencollective.com/nest#sponsor)-->
 
+# Game Backend
+
+NestJS backend for the multiplayer flag guessing game. This repository contains the API server, WebSocket gateway, and database services.
+
+## 🚀 Quick Start
+
+### Prerequisites
+
+- **Docker** and **Docker Compose** installed
+- **Node.js** 18+ (for local development without Docker)
+
+### 1. Using Docker (Recommended)
+
+```bash
+# Clone the repository
+git clone <repository-url>
+cd game-backend
+
+# Create environment file
+cp .env.example .env
+# Edit .env with your configuration
+
+# Start all services (backend, MongoDB, Redis)
+docker-compose up -d
+
+# View logs
+docker-compose logs -f
+
+# Stop services
+docker-compose down
+```
+
+### 2. Local Development
+
+```bash
+# Install dependencies
+npm install
+
+# Start MongoDB and Redis using Docker
+docker-compose up -d mongodb redis
+
+# Start the backend in development mode
+npm run start:dev
+```
+
+## 🔧 Environment Variables
+
+Create a `.env` file in the root directory:
+
+```env
+# Database Configuration
+MONGO_ROOT_USERNAME=admin
+MONGO_ROOT_PASSWORD=password123
+MONGO_DATABASE=gamedb
+
+# Redis Configuration
+REDIS_PASSWORD=redis123
+
+# JWT Configuration
+JWT_SECRET=your-super-secret-jwt-key-change-in-production
+
+# CORS Configuration
+CORS_ORIGIN=http://localhost:4200
+
+# Application Configuration
+NODE_ENV=development
+PORT=3000
+```
+
+## 📡 API Endpoints
+
+- **Health Check**: `GET /health`
+- **Authentication**: `POST /auth/login`, `POST /auth/register`
+- **Game API**: `GET /game/leaderboard`
+- **WebSocket**: `ws://localhost:3000` (Socket.IO)
+
+## 🎮 WebSocket Events
+
+### Client → Server
+- `joinMatchmaking`: Join the matchmaking queue
+- `submitAnswer`: Submit answer during game
+- `leaveGame`: Leave current game
+
+### Server → Client
+- `matchFound`: Match found, game starting
+- `gameState`: Current game state update
+- `roundStart`: New round started
+- `gameEnd`: Game finished with results
+
+## 🗄️ Database
+
+The backend uses MongoDB with the following collections:
+- `users`: User accounts and authentication
+- `games`: Game history and results
+- `countries`: Country data for flag questions
+
+## 🧪 Testing
+
+```bash
+# Run unit tests
+npm test
+
+# Run e2e tests
+npm run test:e2e
+
+# Run specific test suites
+npm run test:service
+npm run test:integration
+```
+
+## 🔧 Development Commands
+
+```bash
+# Start in development mode
+npm run start:dev
+
+# Build for production
+npm run build
+
+# Start production server
+npm run start:prod
+
+# Lint code
+npm run lint
+
+# Format code
+npm run format
+
+# Seed countries data
+npm run seed:countries
+```
+
+## 🐳 Docker Services
+
+This repository includes:
+- **Backend**: NestJS application
+- **MongoDB**: Database for persistent data
+- **Redis**: Cache and session management
+
+## 📂 Project Structure
+
+```
+src/
+├── auth/              # Authentication module
+├── game/              # Game logic and WebSocket
+│   ├── entities/      # Database entities
+│   ├── services/      # Business logic
+│   └── gateways/      # WebSocket gateway
+├── scripts/           # Database seeding scripts
+└── main.ts           # Application entry point
+```
+
+## 🚀 Production Deployment
+
+For production deployment, use the production docker-compose file from the deployment repository or build the production Docker image:
+
+```bash
+# Build production image
+docker build --target production -t game-backend:latest .
+
+# Run production container
+docker run -d -p 3000:3000 --env-file .env game-backend:latest
+```
+
+## 🔗 Related Repositories
+
+- **Frontend**: [game-frontend repository]
+- **Deployment**: [deployment configuration repository]
+
 ## Description
 
 [Nest](https://github.com/nestjs/nest) framework TypeScript starter repository.

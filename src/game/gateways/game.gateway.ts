@@ -16,7 +16,7 @@ import { RedisService } from '../services/redis.service';
 @Injectable()
 @WebSocketGateway({
   cors: {
-    origin: 'http://localhost:4200',
+    origin: process.env.CORS_ORIGIN || 'http://localhost:4200',
     credentials: true,
   },
 })
